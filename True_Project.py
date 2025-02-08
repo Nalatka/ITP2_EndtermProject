@@ -120,7 +120,6 @@ class main():
         self.root = root
         self.root.title("Text Quest Adventure")
         self.root.geometry("1920x1080")
-        self.root.configure(bg="black")
 
         self.menu()
 
@@ -129,10 +128,10 @@ class main():
         self.title_label = tk.Label(self.root, text="Baldur's Gate 4: Viruses and Registration Edition", font=("Arial", 40, "bold"), fg="Yellow", bg="black")
         self.title_label.pack(pady=50)
 
-        self.start_button = tk.Button(self.root, text="Start", font=("Arial", 14), command=self.start_game)
+        self.start_button = tk.Button(self.root, text="Start", font=("Arial", 14), relief="raised", command=self.start_game)
         self.start_button.pack(pady=10)
 
-        self.exit_button = tk.Button(self.root, text="Exit", font=("Arial", 14), command=self.root.quit)
+        self.exit_button = tk.Button(self.root, text="Exit", font=("Arial", 14), relief="raised", command=self.root.quit)
         self.exit_button.pack(pady=10)
     def start_game(self):
         self.current_scene = "start"
@@ -140,15 +139,19 @@ class main():
     def show_scene(self):
         self.clear_screen()
         #создает сцену
+        self.bg_image = Image.open("dungeon.png")  
+        self.bg_image = self.bg_image.resize((1920,1080))  
+        self.bg_photo = ImageTk.PhotoImage(self.bg_image)
+        self.bg_label = tk.Label(self.root, image=self.bg_photo)
+        self.bg_label.place(x=0, y=0, relwidth=1, relheight=1) 
         scene = story[self.current_scene]
         self.story_label = tk.Label(self.root, text=scene["text"], wraplength=400, font=("Arial", 14), fg="white", bg="black")
         self.story_label.pack(pady=20)
-
         self.button_frame = tk.Frame(self.root, bg="black")
         self.button_frame.pack()
         #создает кнопки выбора
         for choice,next_scene in scene["choices"].items():
-            btn = tk.Button(self.button_frame, text=choice, font=("Arial", 12),command=lambda next_scene=next_scene: self.change_scene(next_scene))
+            btn = tk.Button(self.button_frame, text=choice, font=("Arial", 12), relief="raised",command=lambda next_scene=next_scene: self.change_scene(next_scene))
             btn.pack(pady=5)
 
         #если нет выбора, создает кнопку выхода в меню
